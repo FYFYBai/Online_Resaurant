@@ -17,5 +17,7 @@ if I have time.
 
 ----------------------------------------------------------------
 John Nicholas
-
+1. Connected to Trello and Azure server. Started learning how to do payment system.
+2. Make good progress towards the api for the payment system, finish if time allows.
+3. Figure out how to use Stripe API in order to implement the payment system.
 ----------------------------------------------------------------
