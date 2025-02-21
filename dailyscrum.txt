@@ -9,7 +9,11 @@ Qi
 2. backend basic structure for API
 3. TBD
 ----------------------------------------------------------------
-Shaohang
+Shao Hang
+1. Connect to the Trello and the Azure server. Started on the html for the menu
+2. Finish at least 2-3 html pages for the menu/users/selection pages and add JS, Jquery and AJAX
+if I have time.
+3. Mainly how to make the functions work for all the buttons and scrolling and choices.
 
 ----------------------------------------------------------------
 John Nicholas
