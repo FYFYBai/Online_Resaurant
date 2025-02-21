@@ -22,7 +22,7 @@ create table users(
 	postal_code VARCHAR(20) not null,
 	country VARCHAR(50) not null,
     account_password varchar(50) not null,
-    admin_level TINYINT NOT NULL DEFAULT 0,
+    admin_level ENUM('user','admin') NOT NULL ,
     constraint PK_users primary key (userId)
 );
 

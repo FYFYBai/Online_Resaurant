@@ -7,7 +7,7 @@ Qi
 2025-02-21
 1. created database and uploaded into Azure server
 2. backend basic structure for API
-3. TBD
+3. Figure out the main structure of the back-end to be implemented with all the routes and cotrollers.
 ----------------------------------------------------------------
 Shao Hang
 1. Connect to the Trello and the Azure server. Started on the html for the menu
