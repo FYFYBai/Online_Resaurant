@@ -4,6 +4,7 @@ Question to note daily:
 3. Where do I need assistance? What do I need to figure out?
 
 Qi
+2025-02-21
 1. created database and uploaded into Azure server
 2. backend basic structure for API
 3. TBD
