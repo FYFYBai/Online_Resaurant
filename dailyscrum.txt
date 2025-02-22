@@ -3,8 +3,8 @@ Question to note daily:
 2. What I plan to do from this scrum to next? (next 24 hours)
 3. Where do I need assistance? What do I need to figure out?
 
-Qi
 2025-02-21
+Qi
 1. created database and uploaded into Azure server
 2. backend basic structure for API
 3. Figure out the main structure of the back-end to be implemented with all the routes and cotrollers.
@@ -19,4 +19,22 @@ John Nicholas
 1. Connected to Trello and Azure server. Started learning how to do payment system.
 2. Make good progress towards the api for the payment system, finish if time allows.
 3. Figure out how to use Stripe API in order to implement the payment system.
+----------------------------------------------------------------
+
+
+2025-02-22
+Qi
+1.
+2.
+3.
+----------------------------------------------------------------
+Shao Hang
+1.
+2.
+3.
+----------------------------------------------------------------
+John Nicholas
+1. Implemented backend for stripe allowing the stripe server to be accessed.
+2. implement most of if not all of the frontend for the payment system.
+3. How to format the front end for the payment system to best fit the website.
 ----------------------------------------------------------------
