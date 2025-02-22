@@ -14,7 +14,6 @@ Shao Hang
 2. Finish at least 2-3 html pages for the menu/users/selection pages and add JS, Jquery and AJAX
 if I have time.
 3. Mainly how to make the functions work for all the buttons and scrolling and choices.
-
 ----------------------------------------------------------------
 John Nicholas
 1. Connected to Trello and Azure server. Started learning how to do payment system.
