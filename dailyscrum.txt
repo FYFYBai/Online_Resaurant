@@ -7,15 +7,16 @@ Qi
 2025-02-21
 1. created database and uploaded into Azure server
 2. backend basic structure for API
-3. TBD
+3. Figure out the main structure of the back-end to be implemented with all the routes and cotrollers.
 ----------------------------------------------------------------
 Shao Hang
 1. Connect to the Trello and the Azure server. Started on the html for the menu
 2. Finish at least 2-3 html pages for the menu/users/selection pages and add JS, Jquery and AJAX
 if I have time.
 3. Mainly how to design the webpage similar to the mockup and add the features with JS. Figuring how to separate the 3 parts of the menu and doing the popup.
-
 ----------------------------------------------------------------
 John Nicholas
-
+1. Connected to Trello and Azure server. Started learning how to do payment system.
+2. Make good progress towards the api for the payment system, finish if time allows.
+3. Figure out how to use Stripe API in order to implement the payment system.
 ----------------------------------------------------------------
