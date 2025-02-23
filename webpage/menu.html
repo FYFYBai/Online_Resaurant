@@ -11,14 +11,15 @@
     <link rel="stylesheet" href="/Style/style.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../Script/menu.js"></script>
     <title>Pizza Ordering System</title>
 </head>
 <body>
-    <!--Bootstrap nav: https://getbootstrap.com/docs/4.0/components/navbar/-->
+    <!--Bootstrap nav with modifications: https://getbootstrap.com/docs/4.0/components/navbar/-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">La Migliore Pizza</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSuppoprtedContent" aria-controls="navbarSuppoprtedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSuppoprtedContent">
@@ -30,10 +31,10 @@
         </div>
     </nav>
 
-    <!--Bootstrap grid layout for the sidebar and main content: https://getbootstrap.com/docs/4.1/layout/grid/-->
+    <!--Bootstrap grid layout with modifications for the sidebar and main content: https://getbootstrap.com/docs/4.1/layout/grid/-->
     <div class="container-fluid">
         <div class="row">
-            <aside class="col-md-2 sidebar">
+            <aside class="col-md-2 menu">
                 <h3>Menu</h3>
                 <ul class="menu-list">
                     <li class="menu-item">Classic Pizzas</li>
@@ -41,20 +42,32 @@
                     <li class="menu-item">Desserts</li>
                 </ul>
             </aside>
-            <!--Medium-sized screen layout-->
+            <!--Medium-sized screen layout with data-price and name for the js.-->
             <main class="col-md-8">
                 <h2>Classic Pizzas</h2>
                 <div class="pizza-item" data-name="Margherita Pizza" data-price="12.99">
-                    <img src="/Images/MargheritaPizza.png" alt="Margherita Pizza" width="200px">
+                    <img src="../Images/MargheritaPizza.png" alt="Margherita Pizza" width="250" height="200">
                     <p>Margherita Pizza - $12.99</p>
                 </div>
                 <div class="pizza-item" data-name="Con Patate Pizza" data-price="14.99">
-                    <img src="/Images/conPatatePizza.png" alt="Con Patate Pizza" width="200px">
+                    <img src="../Images/conPatatePizza.png" alt="Con Patate Pizza" width="250" height="200">
                     <p>Con Patate Pizza - $14.99</p>
                 </div>
                 <div class="pizza-item" data-name="Alla Bufala Pizza" data-price="15.99">
-                    <img src="/Images/allaBufalaPizza.png" alt="Alla Bufala Pizza" width="200px">
+                    <img src="../Images/allaBufalaPizza.png" alt="Alla Bufala Pizza" width="250" height="200">
                     <p>Alla Bufala Pizza - $15.99</p>
+                </div>
+                <div class="pizza-item" data-name="Quatto Stagioni Pizza" data-price="16.99">
+                    <img src="../Images/quattroStagioniPizza.png" alt="Quatto Stagioni Pizza" width="250" height="200">
+                    <p>Quattro Stagioni Pizza - $16.99</p>
+                </div>
+                <div class="pizza-item" data-name="Neopolitan Pizza" data-price="12.99">
+                    <img src="../Images/neapolitanPizza.png" alt="Neopolitan Pizza" width="250" height="200">
+                    <p>Neopolitan Pizza - $12.99</p>
+                </div>
+                <div class="pizza-item" data-name="Capricciosa Pizza" data-price="10.99">
+                    <img src="../Images/capricciosaPizza.png" alt="Capricciosa Pizza" width="250" height="200">
+                    <p>Capricciosa Pizza - $10.99</p>
                 </div>
             </main>
             <!--Order Summary-->
@@ -66,6 +79,45 @@
             </aside>
         </div>
     </div>
+    <!--Bootstrap Modal with modifications for the menu selection (window popup when you click on the image): https://getbootstrap.com/docs/4.0/components/modal/ -->
+    <div class="modal" id="selectionsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Customize Your Pizza</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="components-selection-form">
+                        <h5>Extra Meat:</h5>
+                        <div id="extra-meat">
+                            <label><input type="checkbox" value="2.00"> Extra Pancetta ($2.00)</label><br>
+                            <label><input type="checkbox" value="2.00"> Extra Prosciutto ($2.00)</label><br>
+                            <label><input type="checkbox" value="2.00"> Extra Salami ($2.00)</label><br>
+                            <label><input type="checkbox" value="2.25"> Extra Speck ($2.25)</label><br>
+                            <label><input type="checkbox" value="2.50"> Extra Pepperoni ($2.50)</label><br>
+                        </div>
+                        <h5>Extra Fromage:</h5>
+                        <div id="extra-fromage">
+                            <label><input type="checkbox" value="1.50"> Extra Parmesan ($1.50)</label><br>
+                            <label><input type="checkbox" value="2.00"> Extra Fiore di Latte ($2.00)</label><br>
+                            <label><input type="checkbox" value="2.50"> Extra Gorgonzola ($2.50)</label><br>
+                            <label><input type="checkbox" value="3.00"> Extra Mozzarella di Bufala ($3.00)</label><br>
+                            <label><input type="checkbox" value="3.00"> Extra Pecorino ($3.00)</label><br>
+                        </div>
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" min="1" value="1">
+                        <p>Total Cost: $<span id="total-cost">0.00</span></p>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="add-to-order">Add to Order</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- footer section -->
     <footer class="footer-end">
         <p>Copyright &copy; <span id="year"></span> La Migliore Pizza. All Rights Reserved.</p>
