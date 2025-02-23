@@ -22,20 +22,21 @@ John Nicholas
 ----------------------------------------------------------------
 
 
-2025-02-22
+2025-02-22-(23)
 Qi
 1. Implemented basic structure and GET /api/components GET /api/components/{type} methods,
     set up routes and controllers for future implementations
-2. Saturday family bussiness & break
+2. Saturday family business & break
 3. not much really
 ----------------------------------------------------------------
 Shao Hang
-1.
-2.
-3.
+1. Designed the html menu page with navbar, main, 2x asides and a footer 
+2. Design the user interface html page and add css and js if time permits (working day - will be done Sunday)
+3. Figure out the design and the functionality
 ----------------------------------------------------------------
 John Nicholas
 1. Implemented backend for stripe allowing the stripe server to be accessed.
 2. implement most of if not all of the frontend for the payment system.
 3. How to format the front end for the payment system to best fit the website.
 ----------------------------------------------------------------
+
