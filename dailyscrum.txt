@@ -24,9 +24,10 @@ John Nicholas
 
 2025-02-22
 Qi
-1.
-2.
-3.
+1. Implemented basic structure and GET /api/components GET /api/components/{type} methods,
+    set up routes and controllers for future implementations
+2. Saturday family bussiness & break
+3. not much really
 ----------------------------------------------------------------
 Shao Hang
 1.
