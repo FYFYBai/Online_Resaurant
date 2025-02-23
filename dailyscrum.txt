@@ -20,9 +20,6 @@ John Nicholas
 2. Make good progress towards the api for the payment system, finish if time allows.
 3. Figure out how to use Stripe API in order to implement the payment system.
 ----------------------------------------------------------------
-<<<<<<< Updated upstream
-=======
-
 
 2025-02-22-(23)
 Qi
