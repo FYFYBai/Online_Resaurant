@@ -36,7 +36,7 @@ $(document).ready(function() {
         });
     
         let quantity = parseInt($('#quantity').val()) || 1;
-        // Equation for the total price
+        //Calculate the total price
         let totalPrice = (pizza.basePrice + toppingsCost) * quantity;
         $('#total-cost').text(totalPrice.toFixed(2));
     }
@@ -47,7 +47,7 @@ $(document).ready(function() {
         updatePricing(currentPizza);
     });
 
-    // Click to add an order in the cart
+    //Add an order to the cart
     $('#add-to-order').click(function() {
         let pizza = $('#selectionsModal').data('currentPizza');
         let quantity = parseInt($('#quantity').val()) || 1;
@@ -119,7 +119,7 @@ $(document).ready(function() {
             $allOrdersList.append(
                 `
                 <li class="order-item" data-index="${index}">
-                    <div class="summary">
+                    <div class="summary d-flex justify-content-between">
                         <div>
                             <strong>${item.quantity}x ${item.name}</strong>
                             ${toppingsText ? `<div class="toppingText">${toppingsText}</div>` : ''}
