@@ -14,6 +14,7 @@ Order.belongsTo(User, { foreignKey: 'user_id' });
 Order.hasMany(OrderItem, { foreignKey: 'order_id' });
 OrderItem.belongsTo(Order, { foreignKey: 'order_id' });
 
+//a single pizza (record in the pizzas table) can appear on many different order items across different orders.
 Pizza.hasMany(OrderItem, { foreignKey: 'pizza_id' });
 OrderItem.belongsTo(Pizza, { foreignKey: 'pizza_id' });
 
