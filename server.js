@@ -6,7 +6,7 @@ const stripe = require("stripe")('sk_test_51Qv25GPVGcp6TkCVy1WuIa5Cp0CFi1eiTqFCH
 app.use(express.json());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Import restaurant routes
+// Import component routes
 const componentRoutes = require('./app/routes/component.route');
 app.use('/api', componentRoutes);
 
