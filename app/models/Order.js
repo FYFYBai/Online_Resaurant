@@ -1,42 +1,36 @@
-//orders table
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Order = sequelize.define('Order', {
-  orderId: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  totalPrice: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false
-  },
-  order_Status: {
-    type: DataTypes.STRING(20),
-    allowNull: false
-  },
-  payment_Code: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  created_At: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
-  },
-  updated_At: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
-  }
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    order_date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    },
+    total_price: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false
+    },
+    payment_code: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    updated_at: {
+        type: DataTypes.DATE,
+        allowNull: true
+    }
 }, {
-  tableName: 'orders',
-  timestamps: false
+    tableName: 'orders',
+    timestamps: false
 });
 
 module.exports = Order;
