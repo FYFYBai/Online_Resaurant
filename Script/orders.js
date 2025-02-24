@@ -1,28 +1,27 @@
 $(document).ready(function() {
-    // stores all the choices of components
+    // simple array to track what's in the cart(toppings)
     let cartItems = [];
     
-    // Click the image so it popup
+    // Click the image so the modal popup
     $('.pizza-item').click(function() {
-        const pizza = {
+        const selectedPizza = {
             name: $(this).data('name'),
             basePrice: parseFloat($(this).data('price')),
-            extras: [],
+            toppings: [],
             quantity: 1,
-            id: Date.now() // Unique ID for each selection (database)
+            id: Date.now() // Unique ID for each selection (database): https://stackoverflow.com/questions/8012002/create-a-unique-number-with-javascript-time
         };
         
-        showCustomizationModal(pizza);
+        showModalWindow(selectedPizza);
     });
 
     // display the modal popup
-    function showCustomizationModal(pizza) {
-        // Store current pizza in modal data
+    function showModalWindow(pizza) {
         $('#selectionsModal').data('currentPizza', pizza);
         
-        // Reset modal: https://stackoverflow.com/questions/26863003/how-to-reset-the-bootstrap-modal-when-it-gets-closed-and-open-it-fresh-again
+        // Reset the modal: https://stackoverflow.com/questions/26863003/how-to-reset-the-bootstrap-modal-when-it-gets-closed-and-open-it-fresh-again
         $('.modal-title').text(`Customize Your ${pizza.name}`);
-        $('input[type="checkbox"]').prop('checked', false);
+        $('#selectionsModal input').prop('checked', false);
         $('#quantity').val(1);
         updatePricing(pizza);
         $('#selectionsModal').modal('show');
@@ -30,78 +29,118 @@ $(document).ready(function() {
 
     // Update the pricing whenever we add one more components (Needs to be checked)
     function updatePricing(pizza) {
-        let extrasCost = 0;
-        $('#selectionsModal input:checked').each(function() {
-            extrasCost += parseFloat($(this).val());
+        let toppingsCost = 0;
+
+        $('input:checked', '#selectionsModal').each(function() {
+            toppingsCost += parseFloat($(this).val()) || 0;
         });
-        
-        // default 1 and always valid
-        const quantity = parseInt($('#quantity').val()) || 1;
+    
+        let quantity = parseInt($('#quantity').val()) || 1;
         // Equation for the total price
-        const totalPrice = (pizza.basePrice + extrasCost) * quantity;
-        // currency with 2 decimals
+        let totalPrice = (pizza.basePrice + toppingsCost) * quantity;
         $('#total-cost').text(totalPrice.toFixed(2));
     }
 
-    // Update the price when I just need to change the input: https://stackoverflow.com/questions/17047497/difference-between-change-and-input-event-for-an-input-element
+    // Update the price when I change the input: https://stackoverflow.com/questions/17047497/difference-between-change-and-input-event-for-an-input-element
     $('#selectionsModal').on('change input', function() {
-        const pizza = $('#selectionsModal').data('currentPizza');
-        updatePricing(pizza);
+        let currentPizza = $('#selectionsModal').data('currentPizza');
+        updatePricing(currentPizza);
     });
 
-    // Click to add an order
+    // Click to add an order in the cart
     $('#add-to-order').click(function() {
-        const pizza = $('#selectionsModal').data('currentPizza');
-        const quantity = parseInt($('#quantity').val()) || 1;
+        let pizza = $('#selectionsModal').data('currentPizza');
+        let quantity = parseInt($('#quantity').val()) || 1;
         
-        pizza.extras = [];
+        //Toppings
+        let selectedToppings = [];
+        let toppingsTotal = 0
 
-        // Loop through each checked box
-        $('#selectionsModal input:checked').each(function() {
-            // Get the text of the component name and price
-            const componentText = $(this).parent().text();
+        // Loop through each checked box: https://stackoverflow.com/questions/1965075/loop-through-checkboxes-and-count-each-one-checked-or-unchecked
+        $('input:checked', '#selectionsModal').each(function() {
+            let $input = $(this);
+            let labelText= $input.parent().text();
+            let price = parseFloat($input.val());
+            let [toppingName] = labelText.split('($');
 
-            // Remove the price part (everything after '($')
-            const componentName = componentText.split('($')[0].trim();
+            selectedToppings.push({
+                name: toppingName.trim(),
+                price: price
+            })
 
-            // Add the name in the array
-            pizza.extras.push(componentName);
+            toppingsTotal += price;
         });
 
-        // Calculate the total price of the extra components (starts at 0) 
-        let extrasTotal = 0; 
-
-        // Loop through each checked box to calculate the total of all the checked box price
-        $('#selectionsModal input:checked').each(function() {
-            extrasTotal += parseFloat($(this).val());
-        });
-            
         // Calculate the final total price
-        const totalPrice = (pizza.basePrice * quantity) + (extrasTotal * quantity);
+        let totalPrice = (pizza.basePrice + toppingsTotal) * quantity;
 
         // Create the new order item
-        const orderItem = {
+        let orderItem = {
             name: pizza.name,
             basePrice: pizza.basePrice,
-            extras: pizza.extras,
+            toppings: selectedToppings,
             quantity: quantity, 
             total: totalPrice,
             id: Date.now()
         };
 
-        // Add the new order item to the bill
         cartItems.push(orderItem);
-
-        // Update the order summarty
         updateOrderDisplay();
-
-        // close the modal
         $('#selectionsModal').modal('hide');
     });
 
-    // TODO: Display the order summary
+    // Display the order summary
+    function updateOrderDisplay() {
+        // Empty ul for now, but we will put text with append later on
+        const $allOrdersList = $('#order-list').empty();
+        let finalCartPrice = 0;
+        
+        //Loops all the array that has all the pizzas: https://stackoverflow.com/questions/72708123/using-foreach-to-find-price-of-items-in-cat-in-the-backend
+        cartItems.forEach((item, index) => {
+            finalCartPrice += item.total;
 
-    // Remove an item from the order summary: https://stackoverflow.com/questions/29605929/remove-first-item-of-the-array-like-popping-from-stack
+            // Build toppings text if any
+            let toppingsText = ''; 
+
+            if (item.toppings.length > 0) {
+                // Loop through each topping in the array
+                for (let i = 0; i < item.toppings.length; i++) {
+                    let topping = item.toppings[i];
+                    
+                    toppingsText += topping.name + ' ($' + topping.price.toFixed(2) + ')';
+                    
+                    // If this is not the last topping skip a line
+                    if (i < item.toppings.length - 1) {
+                    toppingsText += '<br>';
+                    }
+                }
+            }
+            // From previous class notes on javascript (inserting and formatting text in js)
+            $allOrdersList.append(
+                `
+                <li class="order-item" data-index="${index}">
+                    <div class="summary">
+                        <div>
+                            <strong>${item.quantity}x ${item.name}</strong>
+                            ${toppingsText ? `<div class="toppingText">${toppingsText}</div>` : ''}
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="me-3">$${item.total.toFixed(2)}</span>
+                            <button class="btn btn-danger remove-item">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+                `
+            );
+        });
+        
+        // Display the final cart price (currency)
+        $('#total-price').text(finalCartPrice.toFixed(2));
+    }    
+
+    // Remove an item (garbage icon) from the order summary: https://stackoverflow.com/questions/29605929/remove-first-item-of-the-array-like-popping-from-stack
     $('#order-list').on('click', '.remove-item', function() {
         const index = $(this).closest('.order-item').data('index');
         cartItems.splice(index, 1);
