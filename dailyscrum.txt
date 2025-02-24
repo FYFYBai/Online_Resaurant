@@ -40,3 +40,17 @@ John Nicholas
 3. How to format the front end for the payment system to best fit the website.
 ----------------------------------------------------------------
 
+2025-02-24
+Qi
+1. verified and modified database structure, finilized some url designing and troubleshoot.
+2. finish 5-6 routes and controllers including user autentication
+3. Figure out all the functions we need and connnect with front-end app
+
+ShaoHang
+----------------------------------------------------------------
+1. Added the javascript file for adding the selection menu (add all the ingredients together and make the total, make it popup and close)
+Still need to do the user html/js/css and finish the orders summary which I was stuck on for a while.
+2. The users part (html, js) and finish the order summary.
+3. I need to figure out how to put the total of the modal in the
+order summary and show the list of ingredients.
+----------------------------------------------------------------
