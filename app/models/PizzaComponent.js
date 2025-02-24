@@ -9,7 +9,7 @@ const PizzaComponent = sequelize.define('PizzaComponent', {
     primaryKey: true
   },
   kind: {
-    type: DataTypes.ENUM('crust', 'cheese', 'sauces', 'meats', 'toppings'),
+    type: DataTypes.ENUM('cheese','meats'),
     allowNull: false
   },
   component_Name: {
@@ -19,13 +19,8 @@ const PizzaComponent = sequelize.define('PizzaComponent', {
   price: {
     type: DataTypes.DECIMAL(5, 2),
     allowNull: false
-  },
-  // Since Sequelize doesn't natively support MySQL SET,
-  // we're storing the allowed amounts as a string (e.g., comma‐separated).
-  amounts: {
-    type: DataTypes.STRING,
-    allowNull: true
   }
+
 }, {
   tableName: 'pizza_components',
   timestamps: false
