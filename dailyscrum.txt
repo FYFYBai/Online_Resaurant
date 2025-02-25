@@ -57,3 +57,9 @@ John Nicholas
 1. Fixed all issues with stripe on front end and back end, now integrated into site
 2. Connect payment amounts from orders into the stripe payment, then provide a payment id from stripe.
 3. Figure out how to get a payment id from stripe once payment goes through.
+
+2025-02-25
+Qi
+1. implemented all the back-end methods except for user-authentication.
+2. finish user authentication, and add admin verification to all parts requiring admin access.
+3. Figure out user authentication and admin authentication.
