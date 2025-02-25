@@ -7,15 +7,15 @@ exports.hash = (string) => {
 }
 
 // Authenticates a request based on custom headers.
-// Expects x-auth-username and x-auth-password headers.
+// Expects x-auth-email and x-auth-password headers.
 // Throws an error if authentication fails.
 exports.authenticate = async (req) => {
-    const username = req.headers['x-auth-username'];
+    const email = req.headers['x-auth-email'];
     const password = req.headers['x-auth-password'];
-    if (!username || !password) {
+    if (!email || !password) {
         throw new Error('Authentication required');
     }
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findOne({ where: { email } });
     if (!user || user.password !== exports.hash(password)) {
         throw new Error('Authentication invalid');
     }
