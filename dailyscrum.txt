@@ -63,3 +63,8 @@ Qi
 1. implemented all the back-end methods except for user-authentication.
 2. finish user authentication, and add admin verification to all parts requiring admin access.
 3. Figure out user authentication and admin authentication.
+----------------------------------------------------------------
+ShaoHang
+1. Added the css for the orders page. Need to understand the users part. I did do the routes, but I can't figure out how it works. I also need to change the js to fit the database. It's missing a few things.
+2. I need to know how to connect the frontend to the backend especially the js, but the problem is that John left, and usually my page send it to the checkout page then he sends the thing to the database.
+3. Figure out how to connect frontend to backend and link all the routes and match the database. Finish users and maybe check on the Stripe payment.
