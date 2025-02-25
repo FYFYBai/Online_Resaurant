@@ -18,6 +18,9 @@ app.use('/api/components', componentRoutes);
 const orderRoutes = require('./app/routes/order.route');
 app.use('/api/orders', orderRoutes);
 
+// Import menu routes
+const menuRoutes = require('./app/routes/menu.route');
+app.use('/api/menu', menuRoutes);
 // //Teacher's note
 // //logger npmlog
 // const logger = require("npmlog");
