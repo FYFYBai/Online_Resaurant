@@ -2,9 +2,14 @@
 const express = require('express');
 const app = express();
 const stripe = require("stripe")('sk_test_51Qv25GPVGcp6TkCVy1WuIa5Cp0CFi1eiTqFCHL1mvBusFVPvZvs3dhbHEnL3sHdJLo6hf5LuNKPEe7LffL3grW3W00x95HWVFe');
+const path = require('path');
 
 app.use(express.json());
+<<<<<<< Updated upstream
 app.use('/public', express.static(path.join(__dirname, 'public')));
+=======
+app.use(express.static(path.join(__dirname, 'public')));
+>>>>>>> Stashed changes
 
 // Import component routes
 const componentRoutes = require('./app/routes/component.route');
