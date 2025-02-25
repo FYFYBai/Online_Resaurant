@@ -11,8 +11,8 @@ const componentRoutes = require('./app/routes/component.route');
 app.use('/api/components', componentRoutes);
 
 // Import user routes
-//const userRoutes = require('./app/routes/user.route');
-//app.use('/api/users', userRoutes);
+const userRoutes = require('./app/routes/user.route');
+app.use('/api/users', userRoutes);
 
 // Import order routes
 const orderRoutes = require('./app/routes/order.route');
