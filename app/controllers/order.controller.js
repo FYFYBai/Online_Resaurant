@@ -1,12 +1,31 @@
 const { Order, OrderItem, User } = require('../models');
+const auth = require('../utils/auth');
 
+// Create a new order with validation for required fields and data types.
 exports.createOrder = async (req, res) => {
   try {
     // Expecting: userId, items (array of { pizzaId, price, extraComponents }), totalAmount
     const { userId, items, totalAmount } = req.body;
 
-    if (!userId || !items || !Array.isArray(items) || items.length === 0 || !totalAmount) {
-      return res.status(400).json({ message: 'Missing required order details' });
+    // Validate required fields and their types
+    if (!userId || isNaN(userId)) {
+      return res.status(400).json({ message: 'A valid userId is required.' });
+    }
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: 'At least one order item is required.' });
+    }
+    if (!totalAmount || isNaN(totalAmount) || Number(totalAmount) <= 0) {
+      return res.status(400).json({ message: 'A valid totalAmount greater than 0 is required.' });
+    }
+
+    // Validate each order item
+    for (const item of items) {
+      if (!item.pizzaId || isNaN(item.pizzaId)) {
+        return res.status(400).json({ message: 'Each order item must have a valid pizzaId.' });
+      }
+      if (!item.price || isNaN(item.price) || Number(item.price) <= 0) {
+        return res.status(400).json({ message: 'Each order item must have a valid price greater than 0.' });
+      }
     }
 
     // Create the order record.
@@ -35,17 +54,30 @@ exports.createOrder = async (req, res) => {
     });
   } catch (error) {
     console.error('Error placing order:', error);
-    res.status(500).json({ message: 'Error placing order' });
+    res.status(500).json({ message: 'Error placing order', error: error.message });
   }
 };
 
+// Update order status (admin only) with validation for status values.
 exports.updateOrderStatus = async (req, res) => {
   try {
+    // Authenticate and ensure admin access
+    const user = await auth.authenticate(req);
+    if (user.admin_level !== 'admin') {
+      return res.status(403).json({ message: "Admin privileges required" });
+    }
+
     const { id } = req.params;
     const { status } = req.body;
 
     if (!status) {
       return res.status(400).json({ message: 'Status is required.' });
+    }
+
+    // Validate that the provided status is one of the allowed values
+    const validStatuses = ['Pending', 'accepeted', 'delivered', 'rejected'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: `Invalid status. Allowed statuses: ${validStatuses.join(', ')}` });
     }
 
     const order = await Order.findByPk(id);
@@ -66,7 +98,7 @@ exports.updateOrderStatus = async (req, res) => {
   }
 };
 
-
+// Retrieve orders for a user based on their email.
 exports.getUserOrdersByEmail = async (req, res) => {
   try {
     const { email } = req.params;

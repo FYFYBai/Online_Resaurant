@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const { User } = require('../models'); // Adjust the path if necessary
+const { User } = require('../models');
 
 // Hashes a string using SHA-256.
 exports.hash = (string) => {

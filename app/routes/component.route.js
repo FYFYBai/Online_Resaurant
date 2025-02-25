@@ -2,13 +2,19 @@ const express = require('express');
 const router = express.Router();
 const ComponentController = require('../controllers/component.controller');
 
-// GET /api/components that returns all pizza components 
+// GET /api/components - Returns all pizza components 
 router.get('/', ComponentController.getAllComponents);
 
-// GET /api/components/{type} that returns all pizza components with the correponding kind (enum)
+// GET /api/components/:type - Returns components by type (enum)
 router.get('/:type', ComponentController.getComponentsByType);
 
-//A method should go here to modify components, only available to admins
+// POST /api/components - Create a new component (admin only)
+router.post('/', ComponentController.createComponent);
 
+// PUT /api/components/:id - Update an existing component (admin only)
+router.put('/:id', ComponentController.updateComponent);
+
+// DELETE /api/components/:id - Delete a component (admin only)
+router.delete('/:id', ComponentController.deleteComponent);
 
 module.exports = router;
