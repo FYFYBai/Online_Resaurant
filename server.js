@@ -4,15 +4,19 @@ const app = express();
 const stripe = require("stripe")('sk_test_51Qv25GPVGcp6TkCVy1WuIa5Cp0CFi1eiTqFCHL1mvBusFVPvZvs3dhbHEnL3sHdJLo6hf5LuNKPEe7LffL3grW3W00x95HWVFe');
 
 app.use(express.json());
-app.use('/public', express.static(path.join(__dirname, 'public')));
+//app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Import component routes
 const componentRoutes = require('./app/routes/component.route');
 app.use('/api/components', componentRoutes);
 
 // Import user routes
-const userRoutes = require('./app/routes/user.route');
-app.use('/api/users', userRoutes);
+//const userRoutes = require('./app/routes/user.route');
+//app.use('/api/users', userRoutes);
+
+// Import order routes
+const orderRoutes = require('./app/routes/order.route');
+app.use('/api/orders', orderRoutes);
 
 // //Teacher's note
 // //logger npmlog
@@ -47,6 +51,7 @@ app.use('/api/users', userRoutes);
 // Import the Sequelize instance from your configuration
 const sequelize = require('./app/config/database');
 require('./app/models/index')
+
 // Synchronize the database and then start the server
 sequelize.sync()
   .then(() => {

@@ -24,6 +24,11 @@ const Order = sequelize.define('Order', {
         type: DataTypes.INTEGER,
         allowNull: true
     },
+    status: {
+        type: DataTypes.ENUM('Pending', 'accepeted', 'delivered', 'rejected'),
+        allowNull: false,
+        defaultValue: 'Pending'
+    },
     updated_at: {
         type: DataTypes.DATE,
         allowNull: true

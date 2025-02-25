@@ -3,7 +3,7 @@ const sequelize = require('../config/database');
 
 const User = require('./user.js');
 const Pizza = require('./pizza.js');
-const Component = require('./components.js');
+const Component = require('./component.js');
 const Order = require('./order.js');
 const OrderItem = require('./orderItem.js');
 
