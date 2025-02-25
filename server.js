@@ -10,6 +10,10 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 const componentRoutes = require('./app/routes/component.route');
 app.use('/api/components', componentRoutes);
 
+// Import user routes
+const userRoutes = require('./app/routes/user.route');
+app.use('/api/users', userRoutes);
+
 // Import the Sequelize instance from your configuration
 const sequelize = require('./app/config/database');
 require('./app/models/index')

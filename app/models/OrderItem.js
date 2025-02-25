@@ -15,7 +15,6 @@ const OrderItem = sequelize.define('OrderItem', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    // quantity has been removed as requested
     extra_components: {
         type: DataTypes.JSON,
         allowNull: true
