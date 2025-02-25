@@ -1,31 +1,27 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const OrderItem = sequelize.define('OrderItem', {
+const Component = sequelize.define('Component', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    order_id: {
-        type: DataTypes.INTEGER,
+    name: {
+        type: DataTypes.STRING(100),
         allowNull: false
-    },
-    pizza_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    extra_components: {
-        type: DataTypes.JSON,
-        allowNull: true
     },
     price: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
+    },
+    category: {
+        type: DataTypes.ENUM('cheese', 'meat'),
+        allowNull: false
     }
 }, {
-    tableName: 'order_items',
+    tableName: 'components',
     timestamps: false
 });
 
-module.exports = OrderItem;
+module.exports = Component;

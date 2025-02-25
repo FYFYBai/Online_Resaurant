@@ -1,26 +1,29 @@
-//the file that combines all tables together to be required by server.js
-const PizzaComponent = require('./PizzaComponent');
-const User = require('./User');
-const Order = require('./Order');
-const OrderItem = require('./OrderItem');
+// models/index.js
+const sequelize = require('../config/database');
 
-// Define associations
+const User = require('./user.js');
+const Pizza = require('./pizza.js');
+const Component = require('./components.js');
+const Order = require('./order.js');
+const OrderItem = require('./orderItem.js');
 
-// A user can have many orders.
-User.hasMany(Order, { foreignKey: 'userId' });
-Order.belongsTo(User, { foreignKey: 'userId' });
+// Define associations:
+User.hasMany(Order, { foreignKey: 'user_id' });
+Order.belongsTo(User, { foreignKey: 'user_id' });
 
-// An order can have many order items.
-Order.hasMany(OrderItem, { foreignKey: 'orderId' });
-OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
+Order.hasMany(OrderItem, { foreignKey: 'order_id' });
+OrderItem.belongsTo(Order, { foreignKey: 'order_id' });
 
-// A pizza component can be part of many order items.
-PizzaComponent.hasMany(OrderItem, { foreignKey: 'componentId' });
-OrderItem.belongsTo(PizzaComponent, { foreignKey: 'componentId' });
+//a single pizza (record in the pizzas table) can appear on many different order items across different orders.
+Pizza.hasMany(OrderItem, { foreignKey: 'pizza_id' });
+OrderItem.belongsTo(Pizza, { foreignKey: 'pizza_id' });
 
+// Export all models for easy import:
 module.exports = {
-  PizzaComponent,
+  sequelize,
   User,
+  Pizza,
+  Component,
   Order,
   OrderItem
 };
