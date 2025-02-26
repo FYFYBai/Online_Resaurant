@@ -29,7 +29,6 @@ $(document).ready(function() {
     }
 
     // Function to laad the components (meat and cheese)
-// Function to load the components (meat and cheese)
     function loadComponents() {
         // meat components
         $.ajax({
@@ -204,4 +203,66 @@ $(document).ready(function() {
         cartItems.splice(index, 1);
         updateOrderDisplay();
     });
+
+    // POST
+    // click the button to confirm the order (initially it was to send it to the payment page)
+    $('#confirm-order').click(function() {
+        // validation for when the cart has nothing
+        if (cartItems.length === 0) {
+            alert('Your cart is empty. Please add items before confirming.');
+            return;
+        }
+        
+        // Check if the user is logged in
+        $.ajax({
+            url: '/api/users/current',
+            method: 'GET',
+            success: function(userData) {
+                submitOrder(userData.id);
+            },
+            error: function() {
+                // redirect to the login page if the user is not logged in
+                alert('Please log in before placing an order.');
+                window.location.href = '/auth.html';
+            }
+        });
+    });
+
+    // TODO: finish up the submitorder button
+    // function submitOrder(userId) {
+    //     // POST structures based on the database
+    //     const order = {
+    //         userId: userId,
+    //         items: cartItems.map(item => ({
+    //             pizzaId: , //TODO:make a pizzaID that goes with the pizza name,
+    //             price: item.total,
+    //             extraComponents: item.toppings.map(topping => ({
+    //                 name: topping.name,
+    //                 price: topping.price
+    //             }))
+    //         })),
+    //         totalAmount: parseFloat($('#total-price').text())
+    //     };
+        
+    //     // POST orders.html
+    //     $.ajax({
+    //         url: '/api/orders/',
+    //         method: 'POST',
+    //         contentType: 'application/json',
+    //         data: JSON.stringify(order),
+    //         success: function(response) {
+    //             console.log('You order has been submitted.:', response);
+    //             alert('Your order has been placed successfully!');
+                
+    //             cartItems = [];
+    //             updateOrderDisplay();
+    //         },
+    //         error: function(err) {
+    //             console.error('ERROR submitting the order:', err);
+    //             alert('There was an error when you were trying to submit your order. Please try again.');
+    //         }
+    //     });
+    // }
+
+    // TODO: Need to implement the pizaa id with name or else it doesn't match with the database
 });
