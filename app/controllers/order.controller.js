@@ -1,6 +1,3 @@
-const { Order, OrderItem, User } = require('../models');
-const auth = require('../utils/auth');
-
 const { Order, OrderItem } = require('../models');
 const auth = require('../utils/auth');
 
