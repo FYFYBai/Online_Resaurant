@@ -56,9 +56,3 @@ body {
 .bi-twitter:hover, .bi-facebook:hover {
     color: turquoise;
 }
-
-/* Remove any hover effects if needed */
-.link:hover {
-    color: #6c757d;
-    text-decoration: none;
-}
