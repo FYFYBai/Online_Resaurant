@@ -82,3 +82,5 @@ INSERT INTO components (name, price, category) VALUES
 ('Pecorino', 3.00, 'cheese');
 
 SELECT * from users;
+select * from orders;
+select * from order_items;
