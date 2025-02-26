@@ -20,25 +20,26 @@ $(document).ready(function() {
             success: function(pizzas) {
                 let gridContainer = $('.pizza-grid-container');
                 gridContainer.empty();
+
                 pizzas.forEach(pizza => {
                     // create the image file
                     let imageName = pizza.name.replace(/\s+/g, '') + '.png';
                     let pizzaHtml = `
-                        <div class="pizza-item" data-name="${pizza.name}" data-price="${pizza.base_price}">
+                        <div class="pizza-item" data-id="${pizza.id}" data-name="${pizza.name}" data-price="${pizza.base_price}">
                             <img src="./images/${imageName}" alt="${pizza.name}" width="250" height="200">
                             <p>${pizza.name} - $${pizza.base_price}</p>
-                        </div>
-                    `;
+                        </div>`;
                     gridContainer.append(pizzaHtml);
                 });
             },
+
             error: function(err) {
                 console.error("Error loading pizzas: ", err);
             }
         });
     }
 
-    // Function to laad the components (meat and cheese)
+    // Function to laad the components (meat and cheese) with the right api
     function loadComponents() {
         // meat components
         $.ajax({
@@ -47,13 +48,14 @@ $(document).ready(function() {
             success: function(meatComponents) {
                 let meatContainer = $('#extra-meat');
                 meatContainer.empty();
+
                 meatComponents.forEach(component => {
                     let componentHtml = `
-                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>
-                    `;
+                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>`;
                     meatContainer.append(componentHtml);
                 });
             },
+            
             error: function(err) {
                 console.error("Error loading meat components: ", err);
             }
@@ -66,6 +68,7 @@ $(document).ready(function() {
             success: function(cheeseComponents) {
                 let cheeseContainer = $('#extra-fromage');
                 cheeseContainer.empty();
+
                 cheeseComponents.forEach(component => {
                     let componentHtml = `
                         <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>
@@ -73,6 +76,7 @@ $(document).ready(function() {
                     cheeseContainer.append(componentHtml);
                 });
             },
+
             error: function(err) {
                 console.error("Error loading cheese components: ", err);
             }
@@ -84,20 +88,21 @@ $(document).ready(function() {
     // Load components
     loadComponents();
 
-    // Pop up the modal when clicking on the pizza
+    // Pop up the modal when clicking on the respective pizza image
     $(document).on('click', '.pizza-item', function() {
         const selectedPizza = {
+            pizzaId: $(this).data('id'),
             name: $(this).data('name'),
             basePrice: parseFloat($(this).data('price')),
             toppings: [],
             quantity: 1,
             id: Date.now() // Unique ID: https://stackoverflow.com/questions/33184096/date-new-date-date-valueof-vs-date-now#:~:text=current%20date%2Ftime-,Date.,midnight%2001%20January%2C%201970%20UTC
         };
-        showModalWindow(selectedPizza);
+        showModalSelections(selectedPizza);
     });
 
     // Display the modal popup
-    function showModalWindow(pizza) {
+    function showModalSelections(pizza) {
         $('#selectionsModal').data('currentPizza', pizza);
 
         // Reset the modal: https://stackoverflow.com/questions/63107285/how-to-reset-and-close-the-modal-on-button-click
@@ -116,8 +121,8 @@ $(document).ready(function() {
         });
     
         let quantity = parseInt($('#quantity').val()) || 1;
-        let totalPrice = (pizza.basePrice + toppingsCost) * quantity;
-        $('#total-cost').text(totalPrice.toFixed(2));
+        let checkoutTotalPrice = (pizza.basePrice + toppingsCost) * quantity;
+        $('#total-cost').text(checkoutTotalPrice.toFixed(2));
     }
 
     // Update price when inputs change (checkboxes or quantity)
@@ -145,7 +150,7 @@ $(document).ready(function() {
         let pizza = $('#selectionsModal').data('currentPizza');
         let quantity = parseInt($('#quantity').val()) || 1;
         
-        // Calculate current total in cart
+        // Calculate the current total in the cart
         let currentTotal = 0;
         cartItems.forEach(item => {
             currentTotal += item.quantity;
@@ -174,14 +179,15 @@ $(document).ready(function() {
         });
 
         // Calculate all the items in the cart
-        let totalPrice = (pizza.basePrice + toppingsTotal) * quantity;
+        let checkoutTotalPrice = (pizza.basePrice + toppingsTotal) * quantity;
 
         let orderItem = {
+            pizzaId: pizza.pizzaId,
             name: pizza.name,
             basePrice: pizza.basePrice,
             toppings: selectedToppings,
             quantity: quantity, 
-            total: totalPrice,
+            total: checkoutTotalPrice,
             id: Date.now()
         };
 
@@ -199,7 +205,7 @@ $(document).ready(function() {
             finalCartPrice += item.total;
             let toppingsText = ''; 
 
-            // taken from previous class code notes
+            // taken from previous class code notes with slight change (HandsOnProject03)
             if (item.toppings.length > 0) {
                 for (let i = 0; i < item.toppings.length; i++) {
                     let topping = item.toppings[i];
@@ -210,9 +216,9 @@ $(document).ready(function() {
                 }
             }
 
-            // taken from previous class code notes (structures with js)
-            $allOrdersList.append(
-                `
+            // taken from previous class code notes (structures with js class notes) + add Bootstrap: https://icons.getbootstrap.com/icons/trash/,
+            // https://getbootstrap.com/docs/5.0/utilities/flex/   (Justify Content section)
+            $allOrdersList.append(`
                 <li class="order-item" data-index="${index}">
                     <div class="summary d-flex justify-content-between">
                         <div>
@@ -226,10 +232,10 @@ $(document).ready(function() {
                             </button>
                         </div>
                     </div>
-                </li>
-                `
+                </li>`
             );
         });
+
         $('#total-price').text(finalCartPrice.toFixed(2));
     }    
 
@@ -243,27 +249,95 @@ $(document).ready(function() {
     // POST
     // click the button to confirm the order 
     $('#confirm-order').click(function() {
-        // validation for when the cart has nothing
+        // VALIDATION FOR EMPTY CART
         if (cartItems.length === 0) {
-            showModal('Your cart is empty. Please add items before confirming.');
+            showModal('Your cart is empty. Please add your pizzas before confirming.');
             return;
         }
         
-        // Check if the user is logged in
+        // Check if the credentials exist in the session storage
+        if (!sessionStorage.getItem('x-auth-email') || !sessionStorage.getItem('x-auth-password')) {
+            showModal('Please log in before placing an order.');
+            window.location.href = '/auth.html';
+            return;
+        }
+        
+        // Submit the order (backend will authenticate user from headers)
+        submitOrder();
+    });
+    
+    function submitOrder() {
+        // POST structures based on the database
+        const order = {
+            items: cartItems.map(item => ({
+                pizzaId: item.pizzaId,
+                price: item.total,
+                extraComponents: item.toppings.map(topping => ({
+                    name: topping.name,
+                    price: topping.price
+                }))
+            })),
+            totalAmount: parseFloat($('#total-price').text())
+        };
+        
+        // POST orders
         $.ajax({
-            url: '/api/users/current',
-            method: 'GET',
-            success: function(userData) {
-                submitOrder(userData.id);
+            url: '/api/orders/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(order),
+            headers: {
+                'x-auth-email': sessionStorage.getItem('x-auth-email'),
+                'x-auth-password': sessionStorage.getItem('x-auth-password')
             },
-            error: function() {
-                // redirect to the login page if the user is not logged in
-                showModal('Please log in before placing an order.');
+            success: function(response) {
+                console.log('Your order has been submitted:', response);
+                showModal('Your order has been placed successfully!');
+                
+                cartItems = [];
+                updateOrderDisplay();
+            },
+            error: function(err) {
+                console.error('ERROR submitting the order:', err);
+                showModal('There was an error when you were trying to submit your order. Please try again.');
             }
         });
+    }
+
+    /* Notes for me (Erase after when completed):
+    You will need to check whether a user is logged in already for example by calling API e.g. something like /api/users/me and observing the result.
+    This way you can a) add inforation about the currently logged in user to every page (e.g. top right corner) and either show username / logout link, or register/login (if not logged in currenlty).
+    so the modal to log in is only accessible (link is visible) if user is not currently logged in. same for registration.
+    */
+
+    // Function to change the Login/Logout based on the teacher's advice
+    function navbarLinkChange() {
+        const authEmail = sessionStorage.getItem('x-auth-email');
+        
+        // check if user is logged in with their email
+        if (authEmail) {
+            // User is logged in
+            $('.navbar-nav').html(`
+                <li class="nav-item"><a class="nav-link" href="./orders.html">Menu</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" id="logout">Logout (${authEmail})</a></li>`
+            );
+
+        } else {
+            // User is logged out
+            $('.navbar-nav').html(`
+                <li class="nav-item"><a class="nav-link" href="./orders.html">Menu</a></li>
+                <li class="nav-item"><a class="nav-link" href="./auth.html">Login</a></li>`
+            );
+        }
+    }
+    
+    navbarLinkChange();
+
+    // Logout of all the authentication after (not a real logout, but it will remove the email and password from the session storage by clicking)
+    $(document).on('click', '#logout', function() {
+        sessionStorage.removeItem('x-auth-email');
+        sessionStorage.removeItem('x-auth-password');
+        navbarLinkChange();
+        showModal('You have been logged out.');
     });
-
-    // TODO: Need to implement the pizaa id with name or else it doesn't match with the database
-
-    // Remove the redirectBtn click handler since we're not using it anymore
 });
