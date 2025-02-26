@@ -1,16 +1,19 @@
 const { Order, OrderItem, User } = require('../models');
 const auth = require('../utils/auth');
 
-// Create a new order with validation for required fields and data types.
+const { Order, OrderItem } = require('../models');
+const auth = require('../utils/auth');
+
 exports.createOrder = async (req, res) => {
   try {
-    // Expecting: userId, items (array of { pizzaId, price, extraComponents }), totalAmount
-    const { userId, items, totalAmount } = req.body;
+    // Authenticate the user from request headers (expects x-auth-email and x-auth-password)
+    const user = await auth.authenticate(req);
+
+    // Now that the user is authenticated, we use user.id for the order
+    // Expecting: items (array of { pizzaId, price, extraComponents }), totalAmount
+    const { items, totalAmount } = req.body;
 
     // Validate required fields and their types
-    if (!userId || isNaN(userId)) {
-      return res.status(400).json({ message: 'A valid userId is required.' });
-    }
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ message: 'At least one order item is required.' });
     }
@@ -28,9 +31,9 @@ exports.createOrder = async (req, res) => {
       }
     }
 
-    // Create the order record.
+    // Create the order record using the authenticated user's id.
     const newOrder = await Order.create({
-      user_id: userId,
+      user_id: user.id,
       total_price: totalAmount,
       status: 'Pending'
     });
@@ -57,6 +60,7 @@ exports.createOrder = async (req, res) => {
     res.status(500).json({ message: 'Error placing order', error: error.message });
   }
 };
+
 
 // Update order status (admin only) with validation for status values.
 exports.updateOrderStatus = async (req, res) => {
