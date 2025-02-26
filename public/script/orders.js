@@ -126,6 +126,20 @@ $(document).ready(function() {
         updatePricing(currentPizza);
     });
 
+    // VALIDATION FRONT-END: integer and maximum quantity (so it's reasonable), add 10 if it's more than 10.
+    $('#quantity').on('change', function() {
+        let val = parseInt($(this).val());
+
+        if (isNaN(val) || val < 1) {
+            $(this).val(1);
+            showModal('Quantity must be at least 1');
+
+        } else if (val > 10) {
+            $(this).val(10);
+            showModal('You can maximum order 10 pizzas at a time');
+        }
+    });
+
     // Add an order item to the cart
     $('#add-to-order').click(function() {
         let pizza = $('#selectionsModal').data('currentPizza');
