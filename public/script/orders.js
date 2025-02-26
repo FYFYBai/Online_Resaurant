@@ -29,6 +29,7 @@ $(document).ready(function() {
     }
 
     // Function to laad the components (meat and cheese)
+// Function to load the components (meat and cheese)
     function loadComponents() {
         // meat components
         $.ajax({
@@ -36,11 +37,10 @@ $(document).ready(function() {
             method: 'GET',
             success: function(meatComponents) {
                 let meatContainer = $('#extra-meat');
-                
                 meatContainer.empty();
                 meatComponents.forEach(component => {
                     let componentHtml = `
-                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${component.price.toFixed(2)})</label><br>
+                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>
                     `;
                     meatContainer.append(componentHtml);
                 });
@@ -57,10 +57,9 @@ $(document).ready(function() {
             success: function(cheeseComponents) {
                 let cheeseContainer = $('#extra-fromage');
                 cheeseContainer.empty();
-                
                 cheeseComponents.forEach(component => {
                     let componentHtml = `
-                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${component.price.toFixed(2)})</label><br>
+                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>
                     `;
                     cheeseContainer.append(componentHtml);
                 });
