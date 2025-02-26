@@ -145,6 +145,18 @@ $(document).ready(function() {
         let pizza = $('#selectionsModal').data('currentPizza');
         let quantity = parseInt($('#quantity').val()) || 1;
         
+        // Calculate current total in cart
+        let currentTotal = 0;
+        cartItems.forEach(item => {
+            currentTotal += item.quantity;
+        });
+        
+        // VALIDATION FOR MAXIMUM PIZZAS IN CART: 20
+        if (currentTotal + quantity > 20) {
+            showModal(`You can only have a maximum of 20 pizzas in your cart. You currently have ${currentTotal} pizzas.`);
+            return;
+        }
+        
         let selectedToppings = [];
         let toppingsTotal = 0;
 
