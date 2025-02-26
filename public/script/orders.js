@@ -2,7 +2,7 @@ $(document).ready(function() {
     // simple array to track what's in the cart (toppings)
     let cartItems = [];
 
-    // Function to load pizzas from the database via the API
+    // Function to load the pizzas from the database with the API
     function loadPizzas() {
         $.ajax({
             url: '/api/menu',
@@ -28,17 +28,62 @@ $(document).ready(function() {
         });
     }
 
-    // Load pizzas when the document is ready
-    loadPizzas();
+    // Function to laad the components (meat and cheese)
+    function loadComponents() {
+        // meat components
+        $.ajax({
+            url: '/api/components/meat',
+            method: 'GET',
+            success: function(meatComponents) {
+                let meatContainer = $('#extra-meat');
+                
+                meatContainer.empty();
+                meatComponents.forEach(component => {
+                    let componentHtml = `
+                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${component.price.toFixed(2)})</label><br>
+                    `;
+                    meatContainer.append(componentHtml);
+                });
+            },
+            error: function(err) {
+                console.error("Error loading meat components: ", err);
+            }
+        });
+        
+        // cheese components
+        $.ajax({
+            url: '/api/components/cheese',
+            method: 'GET',
+            success: function(cheeseComponents) {
+                let cheeseContainer = $('#extra-fromage');
+                cheeseContainer.empty();
+                
+                cheeseComponents.forEach(component => {
+                    let componentHtml = `
+                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${component.price.toFixed(2)})</label><br>
+                    `;
+                    cheeseContainer.append(componentHtml);
+                });
+            },
+            error: function(err) {
+                console.error("Error loading cheese components: ", err);
+            }
+        });
+    }
 
-    // Delegated event handler for dynamically created .pizza-item elements
+    // Load pizzas
+    loadPizzas();
+    // Load components
+    loadComponents();
+
+    // Pop up the modal when clicking on the pizza
     $(document).on('click', '.pizza-item', function() {
         const selectedPizza = {
             name: $(this).data('name'),
             basePrice: parseFloat($(this).data('price')),
             toppings: [],
             quantity: 1,
-            id: Date.now() // Unique ID for each selection
+            id: Date.now() // Unique ID: https://stackoverflow.com/questions/33184096/date-new-date-date-valueof-vs-date-now#:~:text=current%20date%2Ftime-,Date.,midnight%2001%20January%2C%201970%20UTC
         };
         showModalWindow(selectedPizza);
     });
@@ -46,7 +91,8 @@ $(document).ready(function() {
     // Display the modal popup
     function showModalWindow(pizza) {
         $('#selectionsModal').data('currentPizza', pizza);
-        // Reset modal fields
+
+        // Reset the modal: https://stackoverflow.com/questions/63107285/how-to-reset-and-close-the-modal-on-button-click
         $('.modal-title').text(`Customize Your ${pizza.name}`);
         $('#selectionsModal input').prop('checked', false);
         $('#quantity').val(1);
@@ -54,7 +100,7 @@ $(document).ready(function() {
         $('#selectionsModal').modal('show');
     }
 
-    // Update pricing based on selected toppings and quantity
+    // Update pricing for the quantity and the components
     function updatePricing(pizza) {
         let toppingsCost = 0;
         $('input:checked', '#selectionsModal').each(function() {
@@ -93,7 +139,7 @@ $(document).ready(function() {
             toppingsTotal += price;
         });
 
-        // Calculate the final total price for the item
+        // Calculate all the items in the cart
         let totalPrice = (pizza.basePrice + toppingsTotal) * quantity;
 
         let orderItem = {
@@ -110,7 +156,7 @@ $(document).ready(function() {
         $('#selectionsModal').modal('hide');
     });
 
-    // Update the order summary display
+    // Update the order summary display (list all the items and price, technically a cart)
     function updateOrderDisplay() {
         const $allOrdersList = $('#order-list').empty();
         let finalCartPrice = 0;
@@ -118,6 +164,8 @@ $(document).ready(function() {
         cartItems.forEach((item, index) => {
             finalCartPrice += item.total;
             let toppingsText = ''; 
+
+            // taken from previous class code notes
             if (item.toppings.length > 0) {
                 for (let i = 0; i < item.toppings.length; i++) {
                     let topping = item.toppings[i];
@@ -127,6 +175,8 @@ $(document).ready(function() {
                     }
                 }
             }
+
+            // taken from previous class code notes (structures with js)
             $allOrdersList.append(
                 `
                 <li class="order-item" data-index="${index}">
@@ -149,7 +199,7 @@ $(document).ready(function() {
         $('#total-price').text(finalCartPrice.toFixed(2));
     }    
 
-    // Remove an order item from the summary
+    // Remove item from the order summary: https://stackoverflow.com/questions/29605929/remove-first-item-of-the-array-like-popping-from-stack
     $('#order-list').on('click', '.remove-item', function() {
         const index = $(this).closest('.order-item').data('index');
         cartItems.splice(index, 1);
