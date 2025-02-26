@@ -51,7 +51,7 @@ $(document).ready(function () {
 
                 meatComponents.forEach(component => {
                     let componentHtml = `
-                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>`;
+                        <label><input type="checkbox" value="${component.price}"> ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>`;
                     meatContainer.append(componentHtml);
                 });
             },
@@ -71,7 +71,7 @@ $(document).ready(function () {
 
                 cheeseComponents.forEach(component => {
                     let componentHtml = `
-                        <label><input type="checkbox" value="${component.price}"> Extra ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>
+                        <label><input type="checkbox" value="${component.price}"> ${component.name} ($${parseFloat(component.price).toFixed(2)})</label><br>
                     `;
                     cheeseContainer.append(componentHtml);
                 });
