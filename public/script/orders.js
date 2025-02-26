@@ -249,21 +249,83 @@ $(document).ready(function() {
             return;
         }
         
+        // Get credentials from sessionStorage
+        const authEmail = sessionStorage.getItem('x-auth-email');
+        const authPassword = sessionStorage.getItem('x-auth-password');
+        
+        // Check if credentials exist
+        if (!authEmail || !authPassword) {
+            showModal('Please log into your account before placing an order.');
+            setTimeout(function() {
+                window.location.href = '/auth.html';
+            }, 2000);
+            return;
+        }
+        
         // Check if the user is logged in
         $.ajax({
-            url: '/api/users/current',
+            url: '/api/users/me',
             method: 'GET',
+            headers: {
+                'x-auth-email': authEmail,
+                'x-auth-password': authPassword
+            },
             success: function(userData) {
                 submitOrder(userData.id);
             },
             error: function() {
-                // redirect to the login page if the user is not logged in
-                showModal('Please log in before placing an order.');
+                // Session might be expired
+                showModal('Your session has expired. Please log in again.');
+                sessionStorage.removeItem('x-auth-email');
+                sessionStorage.removeItem('x-auth-password');
+                setTimeout(function() {
+                    window.location.href = '/auth.html';
+                }, 2000);
             }
         });
     });
 
-    // TODO: Need to implement the pizaa id with name or else it doesn't match with the database
-
-    // Remove the redirectBtn click handler since we're not using it anymore
+    function submitOrder(userId) {
+        // POST structures based on the database
+        const order = {
+            userId: userId,
+            items: cartItems.map(item => ({
+                name: item.name,
+                price: item.total,
+                quantity: item.quantity,
+                extraComponents: item.toppings.map(topping => ({
+                    name: topping.name,
+                    price: topping.price
+                }))
+            })),
+            totalAmount: parseFloat($('#total-price').text())
+        };
+        
+        // Get credentials from sessionStorage
+        const authEmail = sessionStorage.getItem('x-auth-email');
+        const authPassword = sessionStorage.getItem('x-auth-password');
+        
+        // POST orders
+        $.ajax({
+            url: '/api/orders/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(order),
+            headers: {
+                'x-auth-email': authEmail,
+                'x-auth-password': authPassword
+            },
+            success: function(response) {
+                console.log('Your order has been submitted:', response);
+                showModal('Your order has been placed successfully!');
+                
+                cartItems = [];
+                updateOrderDisplay();
+            },
+            error: function(err) {
+                console.error('ERROR submitting the order:', err);
+                showModal('There was an error when you were trying to submit your order. Please try again.');
+            }
+        });
+    }
 });
