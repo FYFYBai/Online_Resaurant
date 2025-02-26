@@ -2,6 +2,16 @@ $(document).ready(function() {
     // simple array to track what's in the cart (toppings)
     let cartItems = [];
 
+    // Function to show a modal from bootstrap instead of using alert since we are not allowed to use it due to security risk (this will insert the message)
+    // https://stackoverflow.com/questions/11404711/how-can-i-trigger-a-bootstrap-modal-programmatically
+    function showModal(message) {
+        $('#myModalBody').html(message);
+        
+        // display the modal
+        let myModal = new bootstrap.Modal(document.getElementById('myModal'));
+        myModal.show();
+    }
+
     // Function to load the pizzas from the database with the API
     function loadPizzas() {
         $.ajax({
@@ -205,11 +215,11 @@ $(document).ready(function() {
     });
 
     // POST
-    // click the button to confirm the order (initially it was to send it to the payment page)
+    // click the button to confirm the order 
     $('#confirm-order').click(function() {
         // validation for when the cart has nothing
         if (cartItems.length === 0) {
-            alert('Your cart is empty. Please add items before confirming.');
+            showModal('Your cart is empty. Please add items before confirming.');
             return;
         }
         
@@ -222,47 +232,12 @@ $(document).ready(function() {
             },
             error: function() {
                 // redirect to the login page if the user is not logged in
-                alert('Please log in before placing an order.');
-                window.location.href = '/auth.html';
+                showModal('Please log in before placing an order.');
             }
         });
     });
 
-    // TODO: finish up the submitorder button
-    // function submitOrder(userId) {
-    //     // POST structures based on the database
-    //     const order = {
-    //         userId: userId,
-    //         items: cartItems.map(item => ({
-    //             pizzaId: , //TODO:make a pizzaID that goes with the pizza name,
-    //             price: item.total,
-    //             extraComponents: item.toppings.map(topping => ({
-    //                 name: topping.name,
-    //                 price: topping.price
-    //             }))
-    //         })),
-    //         totalAmount: parseFloat($('#total-price').text())
-    //     };
-        
-    //     // POST orders.html
-    //     $.ajax({
-    //         url: '/api/orders/',
-    //         method: 'POST',
-    //         contentType: 'application/json',
-    //         data: JSON.stringify(order),
-    //         success: function(response) {
-    //             console.log('You order has been submitted.:', response);
-    //             alert('Your order has been placed successfully!');
-                
-    //             cartItems = [];
-    //             updateOrderDisplay();
-    //         },
-    //         error: function(err) {
-    //             console.error('ERROR submitting the order:', err);
-    //             alert('There was an error when you were trying to submit your order. Please try again.');
-    //         }
-    //     });
-    // }
-
     // TODO: Need to implement the pizaa id with name or else it doesn't match with the database
+
+    // Remove the redirectBtn click handler since we're not using it anymore
 });
