@@ -53,14 +53,14 @@ $(document).ready(function () {
                 body: JSON.stringify({ email, password })
             });
             const data = await response.json();
-            if (!response.ok) {
-                // Display error message returned from the server.
-                $('#loginError').html(data.message || "Login failed.").show();
-            } else {
-                // On successful login, show a success message.
+            if (response.ok) {
+                // Store the auth credentials in session storage.
+                sessionStorage.setItem('x-auth-email', email);
+                sessionStorage.setItem('x-auth-password', password);
+            
                 $('#loginError').removeClass('alert-danger').addClass('alert-success')
                     .html("Login successful. Redirecting...").show();
-                // Optionally, redirect after a brief delay.
+                // redirect after a brief delay.
                 setTimeout(() => {
                     window.location.href = "./orders.html";
                 }, 1500);
