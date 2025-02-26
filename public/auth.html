@@ -3,23 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login & Register - La Migliore Pizza">
     <title>Login & Register Form</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style/auth.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-
 <body>
-    <div id="centerContent">
-        <div id="loginPane">
-            Username: <input type="text" name="username"><br>
-            Password: <input type="password" name="password"><br>
-            <button id="loginButton">Login</button>
+    <!--Bootstrap nav with modifications: https://getbootstrap.com/docs/4.0/components/navbar/-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">La Migliore Pizza</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="./orders.html">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="./auth.html">Login</a></li>
+                </ul>
+            </div>
         </div>
-        <div id="registerPane">
-            Username: <input type="text" name="newUsername"><br>
-            Password: <input type="password" name="newPass1"><br>
-            Password (repeated): <input type="password" name="newPass2"><br>
-            <button id="registerButton">Register</button>
+    </nav>
+
+    <!-- Bootstrap login/register form with slight modification: https://mdbootstrap.com/docs/standard/extended/login/#!-->
+    <div class="content-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="card auth-card mx-auto">
+                        <div class="card-body p-4">
+                            <!-- Pills navs -->
+                            <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="tab-login" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab" aria-controls="pills-login" aria-selected="true">Login</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="tab-register" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab" aria-controls="pills-register" aria-selected="false">Register</button>
+                                </li>
+                            </ul>
+                            <!-- Pills navs -->
+
+                            <!-- Pills content -->
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                                    <form>
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="loginEmail">Email</label>
+                                            <input type="email" id="loginEmail" name="email" class="form-control" />
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="password">Password</label>
+                                            <input type="password" id="password" name="password" class="form-control" />
+                                        </div>
+
+                                        <button type="button" id="loginButton" class="btn btn-primary btn-block w-100 mb-4">Sign in</button>
+
+                                        <div class="text-center">
+                                            <p>Not a member? <a href="#" id="switch-to-register">Register</a></p>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+                                    <form>
+                                        <div class="form-outline mb-3">
+                                            <label class="form-label" for="email">Email</label>
+                                            <input type="email" id="email" name="email" class="form-control" required />
+                                        </div>
+                                        
+                                        <div class="form-outline mb-3">
+                                            <label class="form-label" for="first_name">First Name</label>
+                                            <input type="text" id="first_name" name="first_name" class="form-control" required />
+                                        </div>
+                                        
+                                        <div class="form-outline mb-3">
+                                            <label class="form-label" for="middle_name">Middle Name (optional)</label>
+                                            <input type="text" id="middle_name" name="middle_name" class="form-control" />
+                                        </div>
+                                        
+                                        <div class="form-outline mb-3">
+                                            <label class="form-label" for="last_name">Last Name</label>
+                                            <input type="text" id="last_name" name="last_name" class="form-control" required />
+                                        </div>
+                                        
+                                        <div class="form-outline mb-3">
+                                            <label class="form-label" for="street">Street Address</label>
+                                            <input type="text" id="street" name="street" class="form-control" required />
+                                        </div>
+                                        
+                                        <div class="form-outline mb-3">
+                                            <label class="form-label" for="city">City</label>
+                                            <input type="text" id="city" name="city" class="form-control" required />
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="state">State/Province</label>
+                                                <input type="text" id="state" name="state" class="form-control" required />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="postal_code">Postal Code</label>
+                                                <input type="text" id="postal_code" name="postal_code" class="form-control" required />
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-outline mb-3">
+                                            <label class="form-label" for="country">Country</label>
+                                            <input type="text" id="country" name="country" class="form-control" required />
+                                        </div>
+                                        
+                                        <div class="form-outline mb-3">
+                                            <label class="form-label" for="newPass1">Password</label>
+                                            <input type="password" id="newPass1" name="newPass1" class="form-control" required />
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="newPass2">Confirm Password</label>
+                                            <input type="password" id="newPass2" name="newPass2" class="form-control" required />
+                                        </div>
+                                        
+                                        <button type="button" id="registerButton" class="btn btn-primary btn-block w-100 mb-3">Register</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- footer section -->
+    <footer class="footer-end">
+        <p>Copyright &copy; <span id="year"></span> La Migliore Pizza. All Rights Reserved.</p>
+        <script>
+            document.getElementById("year").textContent = new Date().getFullYear();
+        </script>
+        <!-- Bootstrap social media icons -->
+        <div>
+            <a href="https://twitter.com/your-username" class="link" aria-label="Twitter Profile">
+                <i class="bi bi-twitter"></i>
+            </a>
+            <a href="https://facebook.com/your-username" class="link" aria-label="Facebook Profile">
+                <i class="bi bi-facebook"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script src="./script/auth.js"></script>
+    <script>
+        // Add functionality to switch between login and register tabs
+        document.getElementById('switch-to-register').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('tab-register').click();
+        });
+    </script>
 </body>
 </html>
