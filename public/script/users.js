@@ -115,3 +115,34 @@ $(document).ready(function () {
         $("#order-details-" + orderId).toggle();
     });
 });
+
+function navbarLinkChange() {
+    const authEmail = sessionStorage.getItem('x-auth-email');
+
+    if (authEmail) {
+        // When logged in, include Menu, User Profile, and Logout links.
+        $('.navbar-nav').html(`
+            <li class="nav-item"><a class="nav-link" href="./orders.html">Menu</a></li>
+            <li class="nav-item"><a class="nav-link" href="./users.html">User Profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" id="logout">Logout (${authEmail})</a></li>
+        `);
+    } else {
+        // When not logged in, show Menu and Login.
+        $('.navbar-nav').html(`
+            <li class="nav-item"><a class="nav-link" href="./orders.html">Menu</a></li>
+            <li class="nav-item"><a class="nav-link" href="./auth.html">Login</a></li>
+        `);
+    }
+}
+
+// Call this function on page load
+navbarLinkChange();
+
+// Add a logout handler (same as in orders.js)
+$(document).on('click', '#logout', function () {
+    sessionStorage.removeItem('x-auth-email');
+    sessionStorage.removeItem('x-auth-password');
+    navbarLinkChange();
+    alert('You have been logged out.');
+    window.location.href = "./auth.html";
+});

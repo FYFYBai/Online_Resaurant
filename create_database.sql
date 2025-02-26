@@ -70,17 +70,18 @@ INSERT INTO pizzas (name, description, base_price) VALUES
 
 -- Sample data for toppings
 INSERT INTO components (name, price, category) VALUES
-('Pancetta', 2.00, 'meat'),
-('Prosciutto', 2.00, 'meat'),
-('Salami', 2.00, 'meat'),
-('Speck', 2.25, 'meat'),
-('Pepperoni', 2.50, 'meat'),
-('Parmesan', 1.50, 'cheese'),
-('Fiore di Latte', 2.00, 'cheese'),
-('Gorgonzola', 2.50, 'cheese'),
-('Mozzarella di Bufala', 3.00, 'cheese'),
-('Pecorino', 3.00, 'cheese');
+('Extra Pancetta', 2.00, 'meat'),
+('Extra Prosciutto', 2.00, 'meat'),
+('Extra Salami', 2.00, 'meat'),
+('Extra Speck', 2.25, 'meat'),
+('Extra Pepperoni', 2.50, 'meat'),
+('Extra Parmesan', 1.50, 'cheese'),
+('Extra Fiore di Latte', 2.00, 'cheese'),
+('Extra Gorgonzola', 2.50, 'cheese'),
+('Extra Mozzarella di Bufala', 3.00, 'cheese'),
+('Extra Pecorino', 3.00, 'cheese');
 
 SELECT * from users;
 select * from orders;
 select * from order_items;
+select * from components;

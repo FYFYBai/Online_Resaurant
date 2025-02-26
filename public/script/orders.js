@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // simple array to track what's in the cart (toppings)
     let cartItems = [];
 
@@ -6,7 +6,7 @@ $(document).ready(function() {
     // https://stackoverflow.com/questions/11404711/how-can-i-trigger-a-bootstrap-modal-programmatically
     function showModal(message) {
         $('#myModalBody').html(message);
-        
+
         // display the modal
         let myModal = new bootstrap.Modal(document.getElementById('myModal'));
         myModal.show();
@@ -17,7 +17,7 @@ $(document).ready(function() {
         $.ajax({
             url: '/api/menu',
             method: 'GET',
-            success: function(pizzas) {
+            success: function (pizzas) {
                 let gridContainer = $('.pizza-grid-container');
                 gridContainer.empty();
 
@@ -33,7 +33,7 @@ $(document).ready(function() {
                 });
             },
 
-            error: function(err) {
+            error: function (err) {
                 console.error("Error loading pizzas: ", err);
             }
         });
@@ -45,7 +45,7 @@ $(document).ready(function() {
         $.ajax({
             url: '/api/components/meat',
             method: 'GET',
-            success: function(meatComponents) {
+            success: function (meatComponents) {
                 let meatContainer = $('#extra-meat');
                 meatContainer.empty();
 
@@ -55,17 +55,17 @@ $(document).ready(function() {
                     meatContainer.append(componentHtml);
                 });
             },
-            
-            error: function(err) {
+
+            error: function (err) {
                 console.error("Error loading meat components: ", err);
             }
         });
-        
+
         // cheese components
         $.ajax({
             url: '/api/components/cheese',
             method: 'GET',
-            success: function(cheeseComponents) {
+            success: function (cheeseComponents) {
                 let cheeseContainer = $('#extra-fromage');
                 cheeseContainer.empty();
 
@@ -77,7 +77,7 @@ $(document).ready(function() {
                 });
             },
 
-            error: function(err) {
+            error: function (err) {
                 console.error("Error loading cheese components: ", err);
             }
         });
@@ -89,7 +89,7 @@ $(document).ready(function() {
     loadComponents();
 
     // Pop up the modal when clicking on the respective pizza image
-    $(document).on('click', '.pizza-item', function() {
+    $(document).on('click', '.pizza-item', function () {
         const selectedPizza = {
             pizzaId: $(this).data('id'),
             name: $(this).data('name'),
@@ -116,23 +116,23 @@ $(document).ready(function() {
     // Update pricing for the quantity and the components
     function updatePricing(pizza) {
         let toppingsCost = 0;
-        $('input:checked', '#selectionsModal').each(function() {
+        $('input:checked', '#selectionsModal').each(function () {
             toppingsCost += parseFloat($(this).val()) || 0;
         });
-    
+
         let quantity = parseInt($('#quantity').val()) || 1;
         let checkoutTotalPrice = (pizza.basePrice + toppingsCost) * quantity;
         $('#total-cost').text(checkoutTotalPrice.toFixed(2));
     }
 
     // Update price when inputs change (checkboxes or quantity)
-    $('#selectionsModal').on('change input', function() {
+    $('#selectionsModal').on('change input', function () {
         let currentPizza = $('#selectionsModal').data('currentPizza');
         updatePricing(currentPizza);
     });
 
     // VALIDATION FRONT-END: integer and maximum quantity (so it's reasonable), add 10 if it's more than 10.
-    $('#quantity').on('change', function() {
+    $('#quantity').on('change', function () {
         let val = parseInt($(this).val());
 
         if (isNaN(val) || val < 1) {
@@ -146,27 +146,27 @@ $(document).ready(function() {
     });
 
     // Add an order item to the cart
-    $('#add-to-order').click(function() {
+    $('#add-to-order').click(function () {
         let pizza = $('#selectionsModal').data('currentPizza');
         let quantity = parseInt($('#quantity').val()) || 1;
-        
+
         // Calculate the current total in the cart
         let currentTotal = 0;
         cartItems.forEach(item => {
             currentTotal += item.quantity;
         });
-        
+
         // VALIDATION FOR MAXIMUM PIZZAS IN CART: 20
         if (currentTotal + quantity > 20) {
             showModal(`You can only have a maximum of 20 pizzas in your cart. You currently have ${currentTotal} pizzas.`);
             return;
         }
-        
+
         let selectedToppings = [];
         let toppingsTotal = 0;
 
         // Loop through each checked topping checkbox
-        $('input:checked', '#selectionsModal').each(function() {
+        $('input:checked', '#selectionsModal').each(function () {
             let $input = $(this);
             let labelText = $input.parent().text();
             let price = parseFloat($input.val());
@@ -186,7 +186,7 @@ $(document).ready(function() {
             name: pizza.name,
             basePrice: pizza.basePrice,
             toppings: selectedToppings,
-            quantity: quantity, 
+            quantity: quantity,
             total: checkoutTotalPrice,
             id: Date.now()
         };
@@ -200,10 +200,10 @@ $(document).ready(function() {
     function updateOrderDisplay() {
         const $allOrdersList = $('#order-list').empty();
         let finalCartPrice = 0;
-        
+
         cartItems.forEach((item, index) => {
             finalCartPrice += item.total;
-            let toppingsText = ''; 
+            let toppingsText = '';
 
             // taken from previous class code notes with slight change (HandsOnProject03)
             if (item.toppings.length > 0) {
@@ -237,10 +237,10 @@ $(document).ready(function() {
         });
 
         $('#total-price').text(finalCartPrice.toFixed(2));
-    }    
+    }
 
     // Remove item from the order summary: https://stackoverflow.com/questions/29605929/remove-first-item-of-the-array-like-popping-from-stack
-    $('#order-list').on('click', '.remove-item', function() {
+    $('#order-list').on('click', '.remove-item', function () {
         const index = $(this).closest('.order-item').data('index');
         cartItems.splice(index, 1);
         updateOrderDisplay();
@@ -248,24 +248,24 @@ $(document).ready(function() {
 
     // POST
     // click the button to confirm the order 
-    $('#confirm-order').click(function() {
+    $('#confirm-order').click(function () {
         // VALIDATION FOR EMPTY CART
         if (cartItems.length === 0) {
             showModal('Your cart is empty. Please add your pizzas before confirming.');
             return;
         }
-        
+
         // Check if the credentials exist in the session storage
         if (!sessionStorage.getItem('x-auth-email') || !sessionStorage.getItem('x-auth-password')) {
             showModal('Please log in before placing an order.');
             window.location.href = '/auth.html';
             return;
         }
-        
+
         // Submit the order (backend will authenticate user from headers)
         submitOrder();
     });
-    
+
     function submitOrder() {
         // POST structures based on the database
         const order = {
@@ -279,7 +279,7 @@ $(document).ready(function() {
             })),
             totalAmount: parseFloat($('#total-price').text())
         };
-        
+
         // POST orders
         $.ajax({
             url: '/api/orders/',
@@ -290,14 +290,14 @@ $(document).ready(function() {
                 'x-auth-email': sessionStorage.getItem('x-auth-email'),
                 'x-auth-password': sessionStorage.getItem('x-auth-password')
             },
-            success: function(response) {
+            success: function (response) {
                 console.log('Your order has been submitted:', response);
                 showModal('Your order has been placed successfully!');
-                
+
                 cartItems = [];
                 updateOrderDisplay();
             },
-            error: function(err) {
+            error: function (err) {
                 console.error('ERROR submitting the order:', err);
                 showModal('There was an error when you were trying to submit your order. Please try again.');
             }
@@ -313,28 +313,27 @@ $(document).ready(function() {
     // Function to change the Login/Logout based on the teacher's advice
     function navbarLinkChange() {
         const authEmail = sessionStorage.getItem('x-auth-email');
-        
-        // check if user is logged in with their email
-        if (authEmail) {
-            // User is logged in
-            $('.navbar-nav').html(`
-                <li class="nav-item"><a class="nav-link" href="./orders.html">Menu</a></li>
-                <li class="nav-item"><a class="nav-link" href="#" id="logout">Logout (${authEmail})</a></li>`
-            );
 
-        } else {
-            // User is logged out
+        if (authEmail) {
+            // When logged in, include Menu, User Profile, and Logout links.
             $('.navbar-nav').html(`
                 <li class="nav-item"><a class="nav-link" href="./orders.html">Menu</a></li>
-                <li class="nav-item"><a class="nav-link" href="./auth.html">Login</a></li>`
-            );
+                <li class="nav-item"><a class="nav-link" href="./users.html">User Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" id="logout">Logout (${authEmail})</a></li>
+            `);
+        } else {
+            // When not logged in, show Menu and Login.
+            $('.navbar-nav').html(`
+                <li class="nav-item"><a class="nav-link" href="./orders.html">Menu</a></li>
+                <li class="nav-item"><a class="nav-link" href="./auth.html">Login</a></li>
+            `);
         }
     }
-    
+
     navbarLinkChange();
 
     // Logout of all the authentication after (not a real logout, but it will remove the email and password from the session storage by clicking)
-    $(document).on('click', '#logout', function() {
+    $(document).on('click', '#logout', function () {
         sessionStorage.removeItem('x-auth-email');
         sessionStorage.removeItem('x-auth-password');
         navbarLinkChange();
