@@ -113,6 +113,7 @@ $(document).ready(function () {
         $('#selectionsModal').modal('show');
     }
 
+    // This function will update the price in real-time, so whenever you check a box or change the quantity, it should add and display the total amount in the modal
     // Update pricing for the quantity and the components
     function updatePricing(pizza) {
         let toppingsCost = 0;
@@ -121,8 +122,8 @@ $(document).ready(function () {
         });
 
         let quantity = parseInt($('#quantity').val()) || 1;
-        let checkoutTotalPrice = (pizza.basePrice + toppingsCost) * quantity;
-        $('#total-cost').text(checkoutTotalPrice.toFixed(2));
+        let singlePizzaTotalPrice = (pizza.basePrice + toppingsCost) * quantity;
+        $('#total-cost').text(singlePizzaTotalPrice.toFixed(2));
     }
 
     // Update price when inputs change (checkboxes or quantity)
@@ -145,6 +146,7 @@ $(document).ready(function () {
         }
     });
 
+    // 1. This part is to calculate teh price of an individual pizza with all the selected toppings(components/checkedbox)
     // Add an order item to the cart
     $('#add-to-order').click(function () {
         let pizza = $('#selectionsModal').data('currentPizza');
@@ -162,6 +164,7 @@ $(document).ready(function () {
             return;
         }
 
+        // Created an array to store all the selected toppings (components added for 1 pizza)
         let selectedToppings = [];
         let toppingsTotal = 0;
 
@@ -179,7 +182,7 @@ $(document).ready(function () {
         });
 
         // Calculate all the items in the cart
-        let checkoutTotalPrice = (pizza.basePrice + toppingsTotal) * quantity;
+        let singlePizzaTotalPrice = (pizza.basePrice + toppingsTotal) * quantity;
 
         let orderItem = {
             pizzaId: pizza.pizzaId,
@@ -187,7 +190,7 @@ $(document).ready(function () {
             basePrice: pizza.basePrice,
             toppings: selectedToppings,
             quantity: quantity,
-            total: checkoutTotalPrice,
+            total: singlePizzaTotalPrice,
             id: Date.now()
         };
 
@@ -196,7 +199,8 @@ $(document).ready(function () {
         $('#selectionsModal').modal('hide');
     });
 
-    // Update the order summary display (list all the items and price, technically a cart)
+    // 2. The second part is calculate multiple pizzas and their components in the order summary
+    // Update the order summary display (list all the items and price(cart))
     function updateOrderDisplay() {
         const $allOrdersList = $('#order-list').empty();
         let finalCartPrice = 0;
@@ -216,6 +220,7 @@ $(document).ready(function () {
                 }
             }
 
+            // Format the displayed text and add a delete button
             // taken from previous class code notes (structures with js class notes) + add Bootstrap: https://icons.getbootstrap.com/icons/trash/,
             // https://getbootstrap.com/docs/5.0/utilities/flex/   (Justify Content section)
             $allOrdersList.append(`
